@@ -1,5 +1,7 @@
 package com.example.adelson;
 
+import java.util.Date;
+
 public class EstadoModel {
 
     private String uf;
@@ -8,7 +10,7 @@ public class EstadoModel {
     private String deaths;
     private String suspects;
     private String refuses;
-    private String datetime;
+    private Date datetime;
 
     public String getUf() {
         return uf;
@@ -58,11 +60,11 @@ public class EstadoModel {
         this.refuses = refuses;
     }
 
-    public String getDatetime() {
+    public Date getDatetime() {
         return datetime;
     }
 
-    public void setDatetime(String datetime) {
+    public void setDatetime(Date datetime) {
         this.datetime = datetime;
     }
 }

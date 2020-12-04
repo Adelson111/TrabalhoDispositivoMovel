@@ -1,7 +1,9 @@
 package com.example.adelson;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +11,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class EstadoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -43,6 +53,7 @@ public class EstadoActivity extends AppCompatActivity implements AdapterView.OnI
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void pegarEstado(View view) {
         try {
             EstadoModel retorno = new HttpService("/brazil/uf/"+siglaEstado.toLowerCase()).execute().get();
@@ -51,7 +62,8 @@ public class EstadoActivity extends AppCompatActivity implements AdapterView.OnI
             mortos.setText(retorno.getDeaths());
             suspeitos.setText(retorno.getSuspects());
             recuperados.setText(retorno.getRefuses());
-            data_hora.setText(retorno.getDatetime());
+            data_hora.setText(new SimpleDateFormat("dd/MM/yyy HH:mm").format(retorno.getDatetime()));
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -65,4 +77,5 @@ public class EstadoActivity extends AppCompatActivity implements AdapterView.OnI
 
     public void onNothingSelected(AdapterView<?> parent) {
     }
+
 }

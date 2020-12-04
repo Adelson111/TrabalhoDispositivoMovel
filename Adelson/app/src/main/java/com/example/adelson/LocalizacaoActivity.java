@@ -19,20 +19,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class LocalizacaoActivity extends AppCompatActivity {
 
     private Address endereco;
     Map<String, String> estados = new HashMap<>();
     boolean carregado = false;
-    TextView carregamento;
-    String sigla;
 
+    String sigla = "";
+
+    TextView carregamento;
+    TextView falha;
     TextView estado;
     TextView casos;
     TextView mortos;
@@ -53,7 +55,8 @@ public class LocalizacaoActivity extends AppCompatActivity {
         recuperados = findViewById(R.id.textView_recuperados);
         data_hora = findViewById(R.id.textView_data_hora);
 
-        carregamento = findViewById(R.id.carregamento);
+        carregamento = findViewById(R.id.textView_carregamento);
+        falha = findViewById(R.id.textView_falha);
         pedirPermissoes();
 
         estados.put("AC", "Acre");
@@ -129,14 +132,19 @@ public class LocalizacaoActivity extends AppCompatActivity {
                                     sigla = k;
                                 }
                             });
-                            EstadoModel retorno = new HttpService("/brazil/uf/"+sigla.toLowerCase()).execute().get();
-                            estado.setText(retorno.getState());
-                            casos.setText(retorno.getCases());
-                            mortos.setText(retorno.getDeaths());
-                            suspeitos.setText(retorno.getSuspects());
-                            recuperados.setText(retorno.getRefuses());
-                            data_hora.setText(retorno.getDatetime());
-                            carregado = true;
+                            if(sigla != "") {
+                                EstadoModel retorno = new HttpService("/brazil/uf/"+sigla.toLowerCase()).execute().get();
+                                estado.setText(retorno.getState());
+                                casos.setText(retorno.getCases());
+                                mortos.setText(retorno.getDeaths());
+                                suspeitos.setText(retorno.getSuspects());
+                                recuperados.setText(retorno.getRefuses());
+                                data_hora.setText(new SimpleDateFormat("dd/MM/yyy HH:mm").format(retorno.getDatetime()));
+                                carregado = true;
+                            } else {
+                                carregado = true;
+                                falha.setText("Você não está no Brasil!!!");
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
