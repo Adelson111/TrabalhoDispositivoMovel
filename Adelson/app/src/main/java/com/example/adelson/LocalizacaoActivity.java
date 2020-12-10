@@ -68,8 +68,8 @@ public class LocalizacaoActivity extends AppCompatActivity {
         estados.put("ES", "Espírito Santo");
         estados.put("GO", "Goiás");
         estados.put("MA", "Maranhão");
-        estados.put("MT", " Mato Grosso");
-        estados.put("MS", " Mato Grosso do Sul");
+        estados.put("MT", "Mato Grosso");
+        estados.put("MS", "Mato Grosso do Sul");
         estados.put("MG", "Minas Gerais");
         estados.put("PA", "Pará");
         estados.put("PB", "Paraíba");
@@ -128,7 +128,7 @@ public class LocalizacaoActivity extends AppCompatActivity {
                         try {
                             endereco = buscarEndereco(location.getLatitude(), location.getLongitude());
                             estados.forEach((k,v) -> {
-                                if(endereco.getAdminArea().equals("State of "+v)) {
+                                if(endereco.getAdminArea().equals("State of "+v) || endereco.getAdminArea().equals(v)) {
                                     sigla = k;
                                 }
                             });
@@ -171,11 +171,11 @@ public class LocalizacaoActivity extends AppCompatActivity {
         Geocoder geocoder;
         Address address = null;
         List<Address> addresses;
-
         geocoder = new Geocoder(getApplicationContext());
         addresses = geocoder.getFromLocation(latitude, longitude, 1);
         if(addresses.size() > 0) {
             address = addresses.get(0);
+
         }
         return address;
     }
